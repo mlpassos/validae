@@ -1,0 +1,41 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+.formSiteUrl-container {
+ /* width:50%;
+  margin:10% auto;*/
+}
+.formSiteUrl-pesquisar {
+  /*width:300px !important;*/
+}
+.ajax-loading {
+	display:none;
+}
+.ajax-loading img {
+  display:block;
+  margin:0 auto;
+  width:64px;
+  height:64px;
+}
+.principal {
+  margin-top:10px;
+}
+.resultados-total {
+  display:none;
+}
+.resultados-numero {
+  background-color:#5cb85c;;
+}
+.tabela-resultados {
+  display:none;
+}
+.tabela-resultados-mensagem {
+  display:none;
+}
+.tabela-resultados-mensagem-botao {
+  margin-right:10px;
+}
