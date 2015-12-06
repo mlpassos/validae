@@ -6,14 +6,33 @@
             fn.App();
         },
         App : function () {
+        	function sleep(milliseconds) {
+			  var start = new Date().getTime();
+			  for (var i = 0; i < 1e7; i++) {
+			    if ((new Date().getTime() - start) > milliseconds){
+			      break;
+			    }
+			  }
+			}
+			function modal(arrMensagem) {
+				console.log(arrMensagem);
+				return;
+			}
         	$('body').delegate('.tabela-resultados-mensagem-botao','click',function(){
-        		console.log($(this).attr('data-dados'));
+        		//console.log($(this).attr('data-dados'));
         	});
         	$('body').delegate('.validar-todas','click',function(){
         		// var urls = $(this).attr('data-url');
         		// console.log(urls);
-        		$('.tabela-resultados-corpo > tr').each(function(item){
-        			console.log($(this).find('.tabela-resultados-url').text());
+        		var tempo = 500;
+        		$('.tabela-resultados-corpo > tr > td > .verificar-url').each(function(index,item){
+        			var linha = $(this);//.find('.verificar-url');
+					// sleep(tempo);
+					linha.delay(tempo).fadeToggle(tempo, function(){
+						$(this).trigger('click');
+					});
+					tempo += 500;
+					
         		});
         	});
         	$('body').delegate('.verificar-url', 'click', function(){
@@ -45,6 +64,7 @@
 							if (arrInfo.length>0) {
 								botao.parent().parent().next('.tabela-resultados-mensagem')
 	           						.find('.panel-body').append('<button data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
+	           					modal(arrInfo);
 	           					// console.log(arrInfo);
 							} 
 							if (arrErro.length>0) {
@@ -52,6 +72,7 @@
 								botao.parent().parent().next('.tabela-resultados-mensagem')
 	           						//.slideToggle('slow')
 	           						.find('.panel-body').append('<button data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+								modal(arrErro);
 							}
 							botao.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
 		           		}
