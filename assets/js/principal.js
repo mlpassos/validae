@@ -40,7 +40,7 @@
         		var botao = $(this);
         		$.ajax({
 		            type: "get",
-		            url: 'https://html5.validator.nu/?doc=' + url + '&out=json&parser=html5',
+		            url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',
 		           	success: function(data) {
 		           		// console.log(typeof data.messages);
 		           		if (jQuery.isEmptyObject(data.messages)) {
