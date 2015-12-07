@@ -6,6 +6,9 @@
             fn.App();
         },
         App : function () {
+        	// habilita cache? =]
+        	$.ajaxSetup({ cache: true});
+
         	function sleep(milliseconds) {
 			  var start = new Date().getTime();
 			  for (var i = 0; i < 1e7; i++) {
@@ -14,8 +17,44 @@
 			    }
 			  }
 			}
-			function modal(arrMensagem) {
-				console.log(arrMensagem);
+			function escapeHtml(text) {
+			  var map = {
+			    '&': '&amp;',
+			    '<': '&lt;',
+			    '>': '&gt;',
+			    '"': '&quot;',
+			    "'": '&#039;'
+			  };
+
+			  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+			}
+			function modal(tipo, arrMensagem) {
+				//console.log(arrMensagem);
+				var element = "";
+				if (tipo == "info") {
+					element = $('#modalInfo');
+				} else if (tipo == "erro") {
+					element = $('#modalErro');
+				}
+				element.find('.modal-body').html('');
+				// var ed = "";
+				arrMensagem.forEach(function(item,i){
+					// if (item.type!=="error") {
+						// console.log(i);
+						// ed = (i+1) * Math.random();
+						// console.log((i+1) + ' => ' + ed);
+						console.log(item);
+						element.find('.modal-body').append("<div><a role='button' style='margin-bottom:5px;' class='btn btn-primary btn-xs' data-toggle='collapse' href='#collapseExample-" + item.type + item.lastLine + "' aria-expanded='false' aria-controls='collapseExample-" + item.type + item.lastLine + "'>" + item.lastLine + "</a></div>"
+							// + "<p>" + item.subType + "</p>"
+							+ "<div class='collapse' id='collapseExample-" + item.type + item.lastLine + "'>"
+  							+ "<div class='well'>"
+							// + "<p><strong>" + item.lastLine + "</strong></p>"
+							+ "<p class='modal-bg-info bg-warning'>" + escapeHtml(item.extract) + "</p>"
+							+ "<p class='modal-bg-info bg-info'>" + escapeHtml(item.message) + "</p>"
+							+ "</div></div>");
+					// }
+					
+				});
 				return;
 			}
         	$('body').delegate('.tabela-resultados-mensagem-botao','click',function(){
@@ -38,11 +77,13 @@
         	$('body').delegate('.verificar-url', 'click', function(){
         		var url = encodeURIComponent($(this).attr('data-url'));
         		var botao = $(this);
+        		botao.html('<img style="width:16px;height:16px;" src="http://localhost/validagit/validae//assets/images/ajaxloading.gif">');
         		$.ajax({
 		            type: "get",
 		            url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',
 		           	success: function(data) {
 		           		// console.log(typeof data.messages);
+		           		botao.html('');
 		           		if (jQuery.isEmptyObject(data.messages)) {
 		           			// console.log('válido');
 		           			botao.text('w3c válido');
@@ -63,16 +104,16 @@
 			           		});
 							if (arrInfo.length>0) {
 								botao.parent().parent().next('.tabela-resultados-mensagem')
-	           						.find('.panel-body').append('<button data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
-	           					modal(arrInfo);
+	           						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalInfo" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
+	           					modal('info', arrInfo);
 	           					// console.log(arrInfo);
 							} 
 							if (arrErro.length>0) {
 								// if (!panel) {panel = true;};
 								botao.parent().parent().next('.tabela-resultados-mensagem')
 	           						//.slideToggle('slow')
-	           						.find('.panel-body').append('<button data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
-								modal(arrErro);
+	           						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalErro" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+								modal('erro', arrErro);
 							}
 							botao.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
 		           		}
@@ -113,13 +154,14 @@
 			            	var urlsUnicas = [];
 			            	data.forEach(function(item,i){
 			            		if ($.inArray(item.url, urlsUnicas) === -1) {
-							        urlsUnicas.push(item);
+							        urlsUnicas.push(item.url);
 							    }
 			            	});
+			            	// console.log(urlsUnicas);
 			            	urlsUnicas.forEach(function(item,i){
 			            		$('.tabela-resultados-corpo').append('<tr><th scope="row">' + (parseInt(i)) + '</th>'
-				                	+ '<td class="tabela-resultados-url">'+ item.url + '</td>'
-				                	+ '<td><button class="btn btn-xs btn-success verificar-url" data-url="'+ item.url + '">verificar</button></td></tr>'
+				                	+ '<td class="tabela-resultados-url">'+ item + '</td>'
+				                	+ '<td><button class="btn btn-xs btn-success verificar-url" data-url="'+ item + '">verificar</button></td></tr>'
 				                	+ '<tr class="tabela-resultados-mensagem">'
 				                	+ '<td colspan="3">'
 				                	+ '<div class="panel panel-primary">'
@@ -143,7 +185,7 @@
 		            dataType: 'json'
 		        }).done(function(data,status){
 		        	$('.ajax-loading').hide();
-	        		console.log(status);
+	        		//console.log(status);
 	        		if (status=="success") {
 			        	$('.resultados-total').slideToggle('slow', function(){
 			        		$('.tabela-resultados').slideToggle('slow');	

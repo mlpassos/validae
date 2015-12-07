@@ -22,6 +22,20 @@ class Validar extends CI_Controller {
 
  
 	public function index()	{
+		// function unique_multidim_array($array, $key){
+		//     $temp_array = array();
+		//     $i = 0;
+		//     $key_array = array();
+		    
+		//     foreach($array as $val){
+		//         if(!in_array($val[$key],$key_array)){
+		//             $key_array[$i] = $val[$key];
+		//             $temp_array[$i] = $val;
+		//         }
+		//         $i++;
+		//     }
+		//     return $temp_array;
+		// }
 		$this->load->helper('dom_helper');
 		// pega url do site
 		$link = $this->input->post('url');
@@ -30,7 +44,7 @@ class Validar extends CI_Controller {
 		// pega todos os links da página inicial
 		$html = file_get_html($link);
 		$rank = $html->find('a');
-		$res = array ();
+		$res = array();
 		foreach($rank as $element){
 			// se no href dos links existir o domínio, ou seja, for um site interno (geralmente)
 			if( strpos($element->href,$domain) !== false) {
@@ -38,6 +52,8 @@ class Validar extends CI_Controller {
 				array_push($res,$resultado);
 			}
 		}
+		// $resFinal = array();
+		// $res = unique_multidim_array($res, 'data.url');
 		echo json_encode($res);
 		// $data['css']="estilos-validar.css";
 		// $this->load->view('header_view',$data);
