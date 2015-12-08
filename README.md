@@ -16,6 +16,11 @@ Current features:
 
 The validate all funcionality is being developed (TO DO):
 
+** FIRST THING TO DO IS CACHE AJAX CALL DUE TO ABUSE TO THE API ** 
+
+- Smartjax jQuery Plugin tried with no success
+- ajax cache to be implemented via jquery $.ajax cache
+
 - Turn all validation ajax calls into an ajax deferred object for chaining.
 - Offer a way to validate all pages in a unique ajax request.
 
