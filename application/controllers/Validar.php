@@ -19,45 +19,25 @@ class Validar extends CI_Controller {
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
 
-
- 
 	public function index()	{
-		// function unique_multidim_array($array, $key){
-		//     $temp_array = array();
-		//     $i = 0;
-		//     $key_array = array();
-		    
-		//     foreach($array as $val){
-		//         if(!in_array($val[$key],$key_array)){
-		//             $key_array[$i] = $val[$key];
-		//             $temp_array[$i] = $val;
-		//         }
-		//         $i++;
-		//     }
-		//     return $temp_array;
-		// }
+		// load dom_helper
 		$this->load->helper('dom_helper');
-		// pega url do site
+		// get site url
 		$link = $this->input->post('url');
-		// separa o domínio 
+		// strip out domain 
 		$domain = str_replace('http://www.','',$link);
-		// pega todos os links da página inicial
+		// get all links in the page
 		$html = file_get_html($link);
 		$rank = $html->find('a');
 		$res = array();
 		foreach($rank as $element){
-			// se no href dos links existir o domínio, ou seja, for um site interno (geralmente)
+			// if the href attribute of the link is in the same domain, save it to an array
 			if( strpos($element->href,$domain) !== false) {
 				$resultado['url'] = $element->href;
 				array_push($res,$resultado);
 			}
 		}
-		// $resFinal = array();
-		// $res = unique_multidim_array($res, 'data.url');
+		// return the json data with the urls in the same domain
 		echo json_encode($res);
-		// $data['css']="estilos-validar.css";
-		// $this->load->view('header_view',$data);
-		// $this->load->view('content_validar_view');
-		// $this->load->view('footer_view');		
 	}
 }
