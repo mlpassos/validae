@@ -1,22 +1,13 @@
 (function ($) {
     "use strict";
     var fn = {
-        // Funcionalidades
         Iniciar : function () {
             fn.App();
         },
         App : function () {
-        	// habilita cache? =]
+        	// cache? =] needs more implementation
         	$.ajaxSetup({ cache: true});
-
-        	function sleep(milliseconds) {
-			  var start = new Date().getTime();
-			  for (var i = 0; i < 1e7; i++) {
-			    if ((new Date().getTime() - start) > milliseconds){
-			      break;
-			    }
-			  }
-			}
+			// for escaping html text
 			function escapeHtml(text) {
 			  var map = {
 			    '&': '&amp;',
@@ -25,11 +16,10 @@
 			    '"': '&quot;',
 			    "'": '&#039;'
 			  };
-
 			  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 			}
+			// setting up modals (needs to solve bug)
 			function modal(tipo, arrMensagem) {
-				//console.log(arrMensagem);
 				var element = "";
 				if (tipo == "info") {
 					element = $('#modalInfo');
@@ -37,12 +27,7 @@
 					element = $('#modalErro');
 				}
 				element.find('.modal-body').html('');
-				// var ed = "";
 				arrMensagem.forEach(function(item,i){
-					// if (item.type!=="error") {
-						// console.log(i);
-						// ed = (i+1) * Math.random();
-						// console.log((i+1) + ' => ' + ed);
 						console.log(item);
 						element.find('.modal-body').append("<div><a role='button' style='margin-bottom:5px;' class='btn btn-primary btn-xs' data-toggle='collapse' href='#collapseExample-" + item.type + item.lastLine + "' aria-expanded='false' aria-controls='collapseExample-" + item.type + item.lastLine + "'>" + item.lastLine + "</a></div>"
 							// + "<p>" + item.subType + "</p>"
@@ -52,28 +37,24 @@
 							+ "<p class='modal-bg-info bg-warning'>" + escapeHtml(item.extract) + "</p>"
 							+ "<p class='modal-bg-info bg-info'>" + escapeHtml(item.message) + "</p>"
 							+ "</div></div>");
-					// }
-					
 				});
 				return;
 			}
         	$('body').delegate('.tabela-resultados-mensagem-botao','click',function(){
-        		//console.log($(this).attr('data-dados'));
+        		// todo
         	});
+        	// horrible way of getting all the pages results (todo way better $deffering)
         	$('body').delegate('.validar-todas','click',function(){
-        		// var urls = $(this).attr('data-url');
-        		// console.log(urls);
         		var tempo = 500;
         		$('.tabela-resultados-corpo > tr > td > .verificar-url').each(function(index,item){
-        			var linha = $(this);//.find('.verificar-url');
-					// sleep(tempo);
+        			var linha = $(this);
 					linha.delay(tempo).fadeToggle(tempo, function(){
 						$(this).trigger('click');
 					});
 					tempo += 500;
-					
         		});
         	});
+        	// validate single url
         	$('body').delegate('.verificar-url', 'click', function(){
         		var url = encodeURIComponent($(this).attr('data-url'));
         		var botao = $(this);
@@ -85,10 +66,10 @@
 		           		// console.log(typeof data.messages);
 		           		botao.html('');
 		           		if (jQuery.isEmptyObject(data.messages)) {
-		           			// console.log('válido');
 		           			botao.text('w3c válido');
 		           			botao.parent().parent().addClass('bg-success');
 		           		} else {
+		           			// search for errors and infos/warnings and store into array
 		           			var  arrErro = [];
 		           			var  arrInfo = [];
 		           			var  arrWarning = [];
@@ -102,16 +83,14 @@
 			           				arrInfo.push(item);
 			           			} 
 			           		});
+			           		// set up modals with different arrays (todo way better)
 							if (arrInfo.length>0) {
 								botao.parent().parent().next('.tabela-resultados-mensagem')
 	           						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalInfo" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
 	           					modal('info', arrInfo);
-	           					// console.log(arrInfo);
 							} 
 							if (arrErro.length>0) {
-								// if (!panel) {panel = true;};
 								botao.parent().parent().next('.tabela-resultados-mensagem')
-	           						//.slideToggle('slow')
 	           						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalErro" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
 								modal('erro', arrErro);
 							}
@@ -127,6 +106,7 @@
 		        	// console.log('terminou: ' + status);
 		        });
         	});
+			// search pages in a website
         	$('#formSiteUrl').submit(function(e) {
         		e.preventDefault();
         		var url = $('#strPesquisar').val();
@@ -146,9 +126,6 @@
 		            url: window.location.href + "/validar",
 		            data: {
 		            	"url":url
-		           	},
-		           	beforeSend: function() {
-		           		//
 		           	},
 		            success: function(data) {
 			            	var urlsUnicas = [];
@@ -201,6 +178,3 @@
         fn.Iniciar();
     });
 })(jQuery);
-
-			
-

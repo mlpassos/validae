@@ -5,16 +5,10 @@ body {
   padding: 40px 15px;
   text-align: center;
 }
-.formSiteUrl-container {
- /* width:50%;
-  margin:10% auto;*/
+/*.formSiteUrl-container {
 }
 .formSiteUrl-pesquisar {
-  /*width:300px !important;*/
-}
-.ajax-loading {
-	/*display:none;*/
-}
+}*/
 .principal {
   position:relative;
   margin-top:10px;
