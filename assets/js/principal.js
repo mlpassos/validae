@@ -50,10 +50,10 @@
     		url = encodeURIComponent(url);
     		el.html('<img style="width:16px;height:16px;" src="http://localhost/validagit/validae//assets/images/ajaxloading.gif">');
     		$.ajax({
-            type: "get",
-            url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',
-           	dataType: 'json'
-        }).done(cb);
+	            type: "get",
+	            url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',
+	           	dataType: 'json'
+        	}).done(cb);
     	}
 
     	$('body').delegate('.validar-todas','click',function(){
@@ -64,37 +64,37 @@
     			getFile(el, url, function(data) {
     				// console.log(Date.now());
     				el.html('');
-         		if (jQuery.isEmptyObject(data.messages)) {
-         			el.text('w3c válido');
-         			el.parent().parent().addClass('bg-success');
-         		} else {
-         			// search for errors and infos/warnings and store into array
-         			var  arrErro = [];
-         			var  arrInfo = [];
-         			var  arrWarning = [];
-         			el.parent().parent().addClass('bg-danger');
-         			el.text('Erro').removeClass('btn-succcess').addClass('btn-danger');
-           		data.messages.forEach(function(item,i) {
-           			// console.log(item.type);
-           			if (item.type=="error") {
-           				arrErro.push(item);
-           			} else if (item.type=="info") {
-           				arrInfo.push(item);
-           			} 
-           		});
-           		// set up modals with different arrays (todo way better)
-							if (arrInfo.length>0) {
-								el.parent().parent().next('.tabela-resultados-mensagem')
-		         						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalInfo" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
-		         					modal('ielnfo', arrInfo);
-							} 
-							if (arrErro.length>0) {
-								el.parent().parent().next('.tabela-resultados-mensagem')
-		         						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalErro" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
-								modal('erro', arrErro);
-							}
-							el.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
-         		}
+	         		if (jQuery.isEmptyObject(data.messages)) {
+	         			el.text('w3c válido');
+	         			el.parent().parent().addClass('bg-success');
+	         		} else {
+	         			// search for errors and infos/warnings and store into array
+	         			var  arrErro = [];
+	         			var  arrInfo = [];
+	         			var  arrWarning = [];
+	         			el.parent().parent().addClass('bg-danger');
+	         			el.text('Erro').removeClass('btn-succcess').addClass('btn-danger');
+	           			data.messages.forEach(function(item,i) {
+		           			// console.log(item.type);
+		           			if (item.type=="error") {
+		           				arrErro.push(item);
+		           			} else if (item.type=="info") {
+		           				arrInfo.push(item);
+		           			} 
+	           			});
+		           		// set up modals with different arrays (todo way better)
+						if (arrInfo.length>0) {
+							el.parent().parent().next('.tabela-resultados-mensagem')
+		     						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalInfo" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
+		     					modal('ielnfo', arrInfo);
+						} 
+						if (arrErro.length>0) {
+							el.parent().parent().next('.tabela-resultados-mensagem')
+		     						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalErro" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+							modal('erro', arrErro);
+						}
+						el.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
+         			}
     			});
   			});
     	});
