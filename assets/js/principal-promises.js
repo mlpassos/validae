@@ -46,54 +46,74 @@
     	});
 
     	function getFile(file) {
-    		console.log('getting file: ' + file);
+    		// console.log('getting file: ' + file);
     		var url = encodeURIComponent(file);
-    		var resp;
-			return new Promise(function(resolve){
+    		// var resp;
+			return new Promise(function(resolve, reject) {
+				// make some ajax request
+        		// if you get a response, `resolve( answer )`
+        		// if it fails, `reject( excuses )`
 				$.ajax({
 		            type: "get",
 		            url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',
 		           	dataType: 'json'
 	        	}).done(resolve);
+	        	// setTimeout(function(resolve) {
+	        	// 	var data = {
+	        	// 		url: url,
+	        	// 		messages: {
+	        				
+	        	// 		}
+	        	// 	}
+	        	// 	output(data);
+	        	// }, 100);
 			});
 		}
-		var arrOutput = $('.tabela-resultados-corpo > tr > td > .verificar-url');
-
-		function cb(data) {
-			console.log(data);
-		}
+		// console.log(arrOutput);
 		function output(data) {
-			// var urlComp = data.url;
-
-			console.log(typeof data);
-			console.log(data);
-			// if (!data) {
-				// data.forEach(function(item,i) {
-				// 	var atual = item.url;
-				// 	var mensagens = item.messages;
-				// 	console.log(mensagens);
-				// 	arr.each(function(index,item){
-		  //   			var el = $(this);
-		  //   			var url = el.attr('data-url');
-		  //   			if (url == atual) {
-		  //   				if (jQuery.isEmptyObject(mensagens)) {
-		  //   					el.text('w3c válido');
-		  //        				el.parent().parent().addClass('bg-success');	
-		  //   				}
-		  //   			}
-	   //       		});
-				// });
-			// 	console.log('sem data');
-			// } else {
-			// 	cb(data);
-			// }
+			if (data) {
+				// console.log(typeof data);
+				// console.log(data);
+				if (data !== "Complete!") {
+					for (var key in data) {
+					    if (data.hasOwnProperty(key)) {
+					        // console.log(data);
+					        var atual = data['url'];
+					        var mensagens = data['messages'];
+					        console.log(atual);
+					        arr.each(function(index,item){
+				    		  	var el = item;
+				    			// var url = encodeURIComponent(el.attr('data-url'));
+				    			console.log(el);
+				    			if (url == atual) {
+				    				if (!mensagens) {
+				    					el.text('w3c válido');
+				         				el.parent().parent().addClass('bg-success');	
+				    				} else {
+				    					el.text('erro');
+				    					el.parent().parent().addClass('bg-danger');
+				    				}
+				    			}
+			         		});
+					    }
+					}
+				} else {
+					console.log('sem data');
+				}
+			} else {
+				alert('ajax error');
+			}
 		}
-
+		var arr;
+		// var arrRes = new Array();
     	$('body').delegate('.validar-todas','click',function(){
-    		var arr = $('.tabela-resultados-corpo > tr > td > .verificar-url');
+    		arr = $('.tabela-resultados-corpo > tr > td > .verificar-url');
     		var arrUrls = new Array();
+    		
     		arr.each(function(index,item){
     			var url = $(this).attr('data-url');
+    			// var el = $(this);
+    			// arrRes.push(el);
     			arrUrls.push(url);
     		});
     		arrUrls
