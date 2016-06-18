@@ -60,7 +60,7 @@
 	        	}).done(resolve);
 	        	// setTimeout(function(resolve) {
 	        	// 	var data = {
-	        	// 		url: url,
+	        	// 		url: file,
 	        	// 		messages: {
 	        				
 	        	// 		}
@@ -72,26 +72,56 @@
 		// console.log(arrOutput);
 		function output(data) {
 			if (data) {
-				// console.log(typeof data);
-				// console.log(data);
+				console.log(typeof data);
+				 console.log(data.length);
 				if (data !== "Complete!") {
+					// data.each(function(index,item) {
+					// 	console.log('item: ' + item);
+					// });					
 					for (var key in data) {
+						// console.log(data.length);
 					    if (data.hasOwnProperty(key)) {
-					        // console.log(data);
+					    	// console.log(data[key]);
+					        // console.log(data['url']);
+					        // var atual = (key == 'url') ? data[key] : null;
+					        // var mensagens = (key == 'messages') ? data[key] : null;
 					        var atual = data['url'];
 					        var mensagens = data['messages'];
-					        console.log(atual);
+					        console.log('atual: ' + data['url']);
+					        // console.log('mensagens: ' + mensagens);
 					        arr.each(function(index,item){
-				    		  	var el = item;
-				    			// var url = encodeURIComponent(el.attr('data-url'));
-				    			console.log(el);
+				    		  	var el = $(this);
+				    			var url = el.attr('data-url');
 				    			if (url == atual) {
 				    				if (!mensagens) {
 				    					el.text('w3c válido');
 				         				el.parent().parent().addClass('bg-success');	
 				    				} else {
-				    					el.text('erro');
-				    					el.parent().parent().addClass('bg-danger');
+				    		// 			var  arrErro = [];
+					     //     			var  arrInfo = [];
+					     //     			var  arrWarning = [];
+					         			el.parent().parent().addClass('bg-danger');
+					         			el.removeClass('btn-succcess').addClass('btn-danger');
+					     //       			mensagens.forEach(function(item,i) {
+						    //        			// console.log(item.type);
+						    //        			if (item.type=="error") {
+						    //        				arrErro.push(item);
+						    //        			} else if (item.type=="info") {
+						    //        				arrInfo.push(item);
+						    //        			} 
+					     //       			});
+						    //        		// set up modals with different arrays (todo way better)
+										// if (arrInfo.length>0) {
+										// 	el.parent().parent().next('.tabela-resultados-mensagem')
+						    //  						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalInfo" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
+						    //  					modal('ielnfo', arrInfo);
+										// } 
+										// if (arrErro.length>0) {
+										// 	el.parent().parent().next('.tabela-resultados-mensagem')
+						    //  						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalErro" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+										// 	modal('erro', arrErro);
+										// }
+										// el.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
 				    				}
 				    			}
 			         		});
@@ -138,7 +168,7 @@
     	$('body').delegate('.verificar-url', 'click', function(){
     		var url = encodeURIComponent($(this).attr('data-url'));
     		var botao = $(this);
-    		botao.html('<img style="width:16px;height:16px;" src="http://localhost/validagit/validae//assets/images/ajaxloading.gif">');
+    		botao.html('<img style="width:16px;height:16px;" src="http://localhost/validae/assets/images/ajaxloading.gif">');
     		$.ajax({
             type: "get",
             url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',
