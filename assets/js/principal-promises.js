@@ -155,7 +155,8 @@
     		
     		arr.each(function(index,item){
     			var url = $(this).attr('data-url');
-    			// var el = $(this);
+    			var el = $(this);
+	   			el.html('<img style="width:16px;height:16px;" src="http://localhost/validae/assets/images/ajaxloading.gif">');
     			// arrRes.push(el);
     			arrUrls.push(url);
     		});
