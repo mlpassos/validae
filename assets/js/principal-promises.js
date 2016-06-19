@@ -28,7 +28,7 @@
 				}
 				element.find('.modal-body').html('');
 				arrMensagem.forEach(function(item,i){
-						console.log(item);
+						// console.log(item);
 						element.find('.modal-body').append("<div><a role='button' style='margin-bottom:5px;' class='btn btn-primary btn-xs' data-toggle='collapse' href='#collapseExample-" + item.type + item.lastLine + "' aria-expanded='false' aria-controls='collapseExample-" + item.type + item.lastLine + "'>" + item.lastLine + "</a></div>"
 							// + "<p>" + item.subType + "</p>"
 							+ "<div class='collapse' id='collapseExample-" + item.type + item.lastLine + "'>"
@@ -72,12 +72,13 @@
 		// console.log(arrOutput);
 		function output(data) {
 			if (data) {
-				console.log(typeof data);
-				 console.log(data.length);
+				// console.log(typeof data);
+				//  console.log(data);
 				if (data !== "Complete!") {
 					// data.each(function(index,item) {
 					// 	console.log('item: ' + item);
-					// });					
+					// });
+					var aux = "";					
 					for (var key in data) {
 						// console.log(data.length);
 					    if (data.hasOwnProperty(key)) {
@@ -85,46 +86,58 @@
 					        // console.log(data['url']);
 					        // var atual = (key == 'url') ? data[key] : null;
 					        // var mensagens = (key == 'messages') ? data[key] : null;
-					        var atual = data['url'];
-					        var mensagens = data['messages'];
-					        console.log('atual: ' + data['url']);
-					        // console.log('mensagens: ' + mensagens);
-					        arr.each(function(index,item){
-				    		  	var el = $(this);
-				    			var url = el.attr('data-url');
-				    			if (url == atual) {
-				    				if (!mensagens) {
-				    					el.text('w3c válido');
-				         				el.parent().parent().addClass('bg-success');	
-				    				} else {
-				    		// 			var  arrErro = [];
-					     //     			var  arrInfo = [];
-					     //     			var  arrWarning = [];
-					         			el.parent().parent().addClass('bg-danger');
-					         			el.removeClass('btn-succcess').addClass('btn-danger');
-					     //       			mensagens.forEach(function(item,i) {
-						    //        			// console.log(item.type);
-						    //        			if (item.type=="error") {
-						    //        				arrErro.push(item);
-						    //        			} else if (item.type=="info") {
-						    //        				arrInfo.push(item);
-						    //        			} 
-					     //       			});
-						    //        		// set up modals with different arrays (todo way better)
-										// if (arrInfo.length>0) {
-										// 	el.parent().parent().next('.tabela-resultados-mensagem')
-						    //  						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalInfo" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
-						    //  					modal('ielnfo', arrInfo);
-										// } 
-										// if (arrErro.length>0) {
-										// 	el.parent().parent().next('.tabela-resultados-mensagem')
-						    //  						.find('.panel-body').append('<button data-toggle="modal" data-target="#modalErro" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
-										// 	modal('erro', arrErro);
-										// }
-										// el.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
-				    				}
-				    			}
-			         		});
+					        if (aux == data['url']) {
+					        	// nao faz nada eh igual
+					        	// aux = data['url'];
+					        	// console.log('atual: ' + data['url']);
+					        	// var atual = "";
+					        	// console.log('atual_2: ' + data['url']);
+					        } else {
+					        	// faz
+					        	// console.log('aqui');
+					        	var atual = data['url'];
+						        var mensagens = data['messages'];
+						        // console.log('atual: ' + data['url']);
+						        // console.log('mensagens: ' + mensagens);
+						        // console.log(arr.length);
+						        arr.each(function(index,item){
+					    		  	var el = $(this);
+					    			var url = el.attr('data-url');
+					    			// el.html('<img style="width:16px;height:16px;" src="http://localhost/validae/assets/images/ajaxloading.gif">');
+					    			if (url == atual) {
+					    				if (!mensagens) {
+					    					el.text('w3c válido');
+					         				el.parent().parent().addClass('bg-success');	
+					    				} else {
+					    					var  arrErro = [];
+						         			var  arrInfo = [];
+						         			var  arrWarning = [];
+						     				el.text('erro');
+						         			el.parent().parent().addClass('bg-danger');
+						         			el.removeClass('btn-succcess').addClass('btn-danger');
+						           			mensagens.forEach(function(item,i) {
+							           			// console.log(item.type);
+							           			if (item.type=="error") {
+							           				arrErro.push(item);
+							           			} else if (item.type=="info") {
+							           				arrInfo.push(item);
+							           			} 
+						           			});
+							           		// set up modals with different arrays (todo way better)
+											if (arrInfo.length>0) {
+												el.parent().parent().next('.tabela-resultados-mensagem').find('.panel-body').append('<button data-toggle="modal" data-target="#modalInfo" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
+						     					modal('info', arrInfo);
+											} 
+											if (arrErro.length>0) {
+												el.parent().parent().next('.tabela-resultados-mensagem').find('.panel-body').append('<button data-toggle="modal" data-target="#modalErro" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+												modal('erro', arrErro);
+											}
+											el.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
+					    				}
+					    			}
+				         			});
+					        	}
+					        	aux = data['url'];
 					    }
 					}
 				} else {
