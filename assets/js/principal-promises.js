@@ -122,9 +122,9 @@
 						    					var  arrErro = [];
 							         			var  arrInfo = [];
 							         			var  arrWarning = [];
-							     				el.text('erro');
-							         			el.parent().parent().addClass('bg-danger');
-							         			el.removeClass('btn-succcess').addClass('btn-danger');
+							     				// el.text('erro');
+							         // 			el.parent().parent().addClass('bg-danger');
+							         // 			el.removeClass('btn-succcess').addClass('btn-danger');
 							           			mensagens.forEach(function(item,i) {
 								           			// console.log(item.type);
 								           			if (item.type=="error") {
@@ -134,17 +134,26 @@
 								           			} 
 							           			});
 								           		// set up modals with different arrays (todo way better)
+								           		el.html('');
 												if (arrInfo.length>0) {
-													el.parent().parent().next('.tabela-resultados-mensagem')
-													.find('.panel-body')
-													.append('<button data-toggle="modal" data-target="#modalInfo-' + index + '" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
+													el.parent().append('<button data-toggle="modal" data-target="#modalInfo-' + index + '" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
+													// el.parent().parent().next('.tabela-resultados-mensagem')
+													// .find('.panel-body')
+													// .append('<button data-toggle="modal" data-target="#modalInfo-' + index + '" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
 							     					modal('info', arrInfo, index);
 												} 
 												if (arrErro.length>0) {
-													el.parent().parent().next('.tabela-resultados-mensagem').find('.panel-body').append('<button data-toggle="modal" data-target="#modalErro-' + index + '" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+													el.parent().append('<button data-toggle="modal" data-target="#modalErro-' + index + '" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+													// el
+													// .parent()
+													// .parent()
+													// .next('.tabela-resultados-mensagem')
+													// .find('.panel-body')
+													// .append('<button data-toggle="modal" data-target="#modalErro-' + index + '" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
 													modal('erro', arrErro, index);
 												}
-												el.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
+												// el.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
+												el.remove();
 						    				}
 						    			}
 					         		});
