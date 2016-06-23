@@ -20,7 +20,7 @@
 			  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 			}
 			// setting up modals (needs to solve bug)
-			// var modal = function (tipo, arrMensagem) {
+			// var modal = (function (tipo, arrMensagem) {
 			// 	var element = "";
 			// 	function init() {
 			// 		if (tipo == "info") {
@@ -44,8 +44,9 @@
 			// 	return {
 			// 		create: init
 			// 	}
-			// }
+			// })();
 			function modal(tipo, arrMensagem, index) {
+				// criar modal com js passando o template direto
 				var element = "";
 				if (tipo == "info") {
 					element = $('#modalInfo').clone().attr('id', 'modalInfo-' + index).appendTo('body >.container:first');
@@ -136,14 +137,14 @@
 								           		// set up modals with different arrays (todo way better)
 								           		el.html('');
 												if (arrInfo.length>0) {
-													el.parent().append('<button data-toggle="modal" data-target="#modalInfo-' + index + '" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
+													el.parent().append('<button data-toggle="modal" data-tipo="info" data-target="#modalInfo-' + index + '" data-url="' + atual + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
 													// el.parent().parent().next('.tabela-resultados-mensagem')
 													// .find('.panel-body')
 													// .append('<button data-toggle="modal" data-target="#modalInfo-' + index + '" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
 							     					modal('info', arrInfo, index);
 												} 
 												if (arrErro.length>0) {
-													el.parent().append('<button data-toggle="modal" data-target="#modalErro-' + index + '" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+													el.parent().append('<button data-toggle="modal" data-tipo="erro" data-target="#modalErro-' + index + '" data-dados="' + atual + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
 													// el
 													// .parent()
 													// .parent()
