@@ -207,7 +207,7 @@
 	    		arr.each(function(index,item){
 	    			var url = $(this).attr('data-url');
 	    			var el = $(this);
-		   			el.html('<img style="width:16px;height:16px;" src="http://localhost/validae/assets/images/ajaxloading.gif">');
+		   			el.html('<img style="width:16px;height:16px;" src="http://localhost/validae-git/assets/images/ajaxloading.gif">');
 	    			arrUrls.push(url);
 	    		});
 	    		arrUrls
@@ -219,7 +219,7 @@
 								// console.log('aqui');
 								return filePromise;
 							})
-							.then(DelayPromise(1100))
+							.then(DelayPromise(2000))
 							.then(output);
 					},
 					Promise.resolve() // fulfilled promise to start chain
@@ -235,7 +235,7 @@
 	    	$('body').delegate('.verificar-url', 'click', function() {
 	    		var url = encodeURIComponent($(this).attr('data-url'));
 	    		var botao = $(this);
-	    		botao.html('<img style="width:16px;height:16px;" src="http://localhost/validae/assets/images/ajaxloading.gif">');
+	    		botao.html('<img style="width:16px;height:16px;" src="http://localhost/validae-git/assets/images/ajaxloading.gif">');
 	    		$.ajax({
 		            type: "get",
 		            url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',
