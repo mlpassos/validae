@@ -73,6 +73,20 @@
 	    		// todo
 	    	});
 
+	    	function DelayPromise(delay) {  
+			  //return a function that accepts a single variable
+			  return function(data) {
+			    //this function returns a promise.
+			    return new Promise(function(resolve, reject) {
+			      setTimeout(function() {
+			        //a promise that is resolved after "delay" milliseconds with the data provided
+			        console.log('Esperou 1s...');
+			        resolve(data);
+			      }, delay);
+			    });
+			  }
+			}
+
 	    	function getFile(file) {
 	    		// console.log('getting file: ' + file);
 	    		var url = encodeURIComponent(file);
@@ -85,12 +99,19 @@
 			            type: "get",
 			            url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',
 			           	dataType: 'json'
-		        	}).done(resolve);
+		        	}).done(resolve).fail(function() {
+		        		reject('Falhou');
+		        	});
 		        	// setTimeout(function(resolve) {
 		        	// 	var data = {
 		        	// 		url: file,
 		        	// 		messages: {
-		        				
+		        	// 			0: {
+		        	// 				type: 'info'
+		        	// 			},
+		        	// 			1: {
+		        	// 				type: 'erro'
+		        	// 			}
 		        	// 		}
 		        	// 	}
 		        	// 	output(data);
@@ -111,12 +132,16 @@
 						        	// faz
 						        	var atual = data['url'];
 							        var mensagens = data['messages'];
-							        // console.log('mensagens: ' + mensagens);
+							        console.log('mensagens: ' + mensagens);
 							        arr.each(function(index,item){
 						    		  	var el = $(this);
 						    			var url = el.attr('data-url');
 						    			if (url == atual) {
-						    				if (!mensagens) {
+						    				// set background transparent on parent
+							         		el.parent().css('background-color', 'transparent');
+							         		el.html('');
+						    				if ($.isEmptyObject(mensagens)) {
+						    					console.log('mensagens: ' + mensagens);
 						    					el.text('w3c válido');
 						         				el.parent().parent().addClass('bg-success');	
 						    				} else {
@@ -124,8 +149,8 @@
 							         			var  arrInfo = [];
 							         			var  arrWarning = [];
 							     				// el.text('erro');
-							         // 			el.parent().parent().addClass('bg-danger');
-							         // 			el.removeClass('btn-succcess').addClass('btn-danger');
+							       				// el.parent().parent().addClass('bg-danger');
+							         			// el.removeClass('btn-succcess').addClass('btn-danger');
 							           			mensagens.forEach(function(item,i) {
 								           			// console.log(item.type);
 								           			if (item.type=="error") {
@@ -135,7 +160,7 @@
 								           			} 
 							           			});
 								           		// set up modals with different arrays (todo way better)
-								           		el.html('');
+								           		
 												if (arrInfo.length>0) {
 													el.parent().append('<button data-toggle="modal" data-tipo="info" data-target="#modalInfo-' + index + '" data-url="' + atual + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
 													// el.parent().parent().next('.tabela-resultados-mensagem')
@@ -169,9 +194,12 @@
 					alert('ajax error');
 				}
 			}
-			
+
 			// var arrRes = new Array();
 	    	$('body').delegate('.validar-todas','click',function(){
+	    		// remove old modals
+	    		$('[id^="modalInfo-]').remove();
+				$('[id^="modalErro-"]').remove();
 	    		arr = $('.tabela-resultados-corpo > tr > td > .verificar-url');
 	    		var arrUrls = new Array();
 	    		arr.each(function(index,item){
@@ -189,12 +217,16 @@
 								// console.log('aqui');
 								return filePromise;
 							})
+							.then(DelayPromise(1100))
 							.then(output);
 					},
 					Promise.resolve() // fulfilled promise to start chain
 				)
 				.then(function() {
 					output("Complete!");
+				}).catch(function(){
+					// erro
+					alert('Erro de rede');
 				});
 	    	});
 	    	// validate single url
@@ -208,7 +240,7 @@
 		           	success: function(data) {
 		           		// console.log(typeof data.messages);
 		           		botao.html('');
-		           		if (jQuery.isEmptyObject(data.messages)) {
+		           		if ($.isEmptyObject(data.messages)) {
 		           			botao.text('w3c válido');
 		           			botao.parent().parent().addClass('bg-success');
 		           		} else {
@@ -271,6 +303,7 @@
 		            	"url":url
 		           	},
 		            success: function(data) {
+		            	$('.ajax-loading').hide();
 		            	var urlsUnicas = [];
 		            	data.forEach(function(item,i){
 		            		if ($.inArray(item.url, urlsUnicas) === -1) {
@@ -304,7 +337,6 @@
 		            },
 		            dataType: 'json'
 		        }).done(function(data,status) {
-		        	$('.ajax-loading').hide();
 		      		//console.log(status);
 		      		if (status=="success") {
 			        	$('.resultados-total').slideToggle('slow', function(){
