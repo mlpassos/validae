@@ -132,7 +132,7 @@
 						        	// faz
 						        	var atual = data['url'];
 							        var mensagens = data['messages'];
-							        console.log('mensagens: ' + mensagens);
+							        // console.log('mensagens: ' + mensagens);
 							        arr.each(function(index,item){
 						    		  	var el = $(this);
 						    			var url = el.attr('data-url');
@@ -140,6 +140,8 @@
 						    				// set background transparent on parent
 							         		el.parent().css('background-color', 'transparent');
 							         		el.html('');
+							         		// validar por tamanho dos arrays ao inves do objeto
+							         		// pois checa duas vezes
 						    				if ($.isEmptyObject(mensagens)) {
 						    					console.log('mensagens: ' + mensagens);
 						    					el.text('w3c válido');
