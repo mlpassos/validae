@@ -41,3 +41,12 @@ body {
 .modal-bg-info {
   padding:5px;
 }
+.page-stats {
+  margin:10px 0;
+}
+.verde {
+  background-color: green;
+}
+.vermelho {
+  background-color: red;
+}

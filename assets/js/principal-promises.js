@@ -52,6 +52,8 @@
 					element = $('#modalInfo').clone().attr('id', 'modalInfo-' + index).appendTo('body >.container:first');
 				} else if (tipo == "erro") {
 					element = $('#modalErro').clone().attr('id', 'modalErro-' + index).appendTo('body > .container:first');
+				} else if (tipo == "non-document-error") {
+					element = $('#modalND').clone().attr('id', 'modalND-' + index).appendTo('body > .container:first');
 				}
 				element.find('.modal-body').html('');
 				arrMensagem.forEach(function(item,i){
@@ -80,7 +82,7 @@
 			    return new Promise(function(resolve, reject) {
 			      setTimeout(function() {
 			        //a promise that is resolved after "delay" milliseconds with the data provided
-			        console.log('Esperou 1s...');
+			        console.log('Esperou 2s...');
 			        resolve(data);
 			      }, delay);
 			    });
@@ -99,8 +101,9 @@
 			            type: "get",
 			            url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',
 			           	dataType: 'json'
-		        	}).done(resolve).fail(function() {
-		        		reject('Falhou');
+		        	}).done(resolve).fail(function( jqXHR, textStatus ) {
+		        		// reject(textStatus);
+  						console.log( url + " failed: " + textStatus );
 		        	});
 		        	// setTimeout(function(resolve) {
 		        	// 	var data = {
@@ -120,8 +123,9 @@
 			}
 			// console.log(arrOutput);
 			function output(data) {
+				// console.log('aqui: ' + textStatus);
 				if (data) {
-					 console.log(data);
+					 // console.log(data);
 					if (data !== "Complete!") {
 						var aux = "";					
 						for (var key in data) {
@@ -143,11 +147,17 @@
 							         		// validar por tamanho dos arrays ao inves do objeto
 							         		// pois checa duas vezes
 						    				if ($.isEmptyObject(mensagens)) {
-						    					console.log('mensagens: ' + mensagens);
-						    					el.text('w3c válido');
+												var elval = $('.validas');
+												var valorval = parseInt(elval.text());
+												elval.text(valorval + 1);
+						    					
+						    					console.log('url válida: ' + atual);
+						    					el.parent().html('<span class="badge green">WEC Válido</span>');
+						    					// el.parent().text('w3c válido');
 						         				el.parent().parent().addClass('bg-success');	
 						    				} else {
 						    					var  arrErro = [];
+						    					var  arrND = [];
 							         			var  arrInfo = [];
 							         			var  arrWarning = [];
 							     				// el.text('erro');
@@ -159,16 +169,23 @@
 								           				arrErro.push(item);
 								           			} else if (item.type=="info") {
 								           				arrInfo.push(item);
+								           			} else if (item.type=="non-document-error") {
+								           				arrND.push(item);
 								           			} 
 							           			});
 								           		// set up modals with different arrays (todo way better)
-								           		
+								           		var elerro = $('.erradas');
+								           		var elnd = $('.nd');
+												var valor = parseInt(elerro.text());
+												var valornd = parseInt(elnd.text());
 												if (arrInfo.length>0) {
 													el.parent().append('<button data-toggle="modal" data-tipo="info" data-target="#modalInfo-' + index + '" data-url="' + atual + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
 													// el.parent().parent().next('.tabela-resultados-mensagem')
 													// .find('.panel-body')
 													// .append('<button data-toggle="modal" data-target="#modalInfo-' + index + '" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
 							     					modal('info', arrInfo, index);
+							     					
+													elerro.text(valor + 1);
 												} 
 												if (arrErro.length>0) {
 													el.parent().append('<button data-toggle="modal" data-tipo="erro" data-target="#modalErro-' + index + '" data-dados="' + atual + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
@@ -179,6 +196,18 @@
 													// .find('.panel-body')
 													// .append('<button data-toggle="modal" data-target="#modalErro-' + index + '" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
 													modal('erro', arrErro, index);
+													elerro.text(valor + 1);
+												}
+												if (arrND.length>0) {
+													el.parent().append('<button data-toggle="modal" data-tipo="non-document-error" data-target="#modalND-' + index + '" data-dados="' + atual + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Inválido <span class="badge">' + arrND.length + '</span></button>');
+													// el
+													// .parent()
+													// .parent()
+													// .next('.tabela-resultados-mensagem')
+													// .find('.panel-body')
+													// .append('<button data-toggle="modal" data-target="#modalErro-' + index + '" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+													modal('non-document-error', arrND, index);
+													elnd.text(valornd + 1);
 												}
 												// el.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
 												el.remove();
@@ -199,15 +228,17 @@
 
 			// var arrRes = new Array();
 	    	$('body').delegate('.validar-todas','click',function(){
+	    		$('.page-stats').slideToggle();
 	    		// remove old modals
 	    		$('[id^="modalInfo-]').remove();
 				$('[id^="modalErro-"]').remove();
+				$('[id^="modalND-"]').remove();
 	    		arr = $('.tabela-resultados-corpo > tr > td > .verificar-url');
 	    		var arrUrls = new Array();
 	    		arr.each(function(index,item){
 	    			var url = $(this).attr('data-url');
 	    			var el = $(this);
-		   			el.html('<img style="width:16px;height:16px;" src="http://localhost/validae-git/assets/images/ajaxloading.gif">');
+		   			el.html('<img style="width:16px;height:16px;" src="http://localhost/validae/assets/images/ajaxloading.gif">');
 	    			arrUrls.push(url);
 	    		});
 	    		arrUrls
@@ -221,21 +252,19 @@
 							})
 							.then(DelayPromise(2000))
 							.then(output);
+							// .catch(erro);
 					},
 					Promise.resolve() // fulfilled promise to start chain
 				)
 				.then(function() {
 					output("Complete!");
-				}).catch(function(){
-					// erro
-					alert('Erro de rede');
 				});
 	    	});
 	    	// validate single url
 	    	$('body').delegate('.verificar-url', 'click', function() {
 	    		var url = encodeURIComponent($(this).attr('data-url'));
 	    		var botao = $(this);
-	    		botao.html('<img style="width:16px;height:16px;" src="http://localhost/validae-git/assets/images/ajaxloading.gif">');
+	    		botao.html('<img style="width:16px;height:16px;" src="http://localhost/validae/assets/images/ajaxloading.gif">');
 	    		$.ajax({
 		            type: "get",
 		            url: 'https://validator.w3.org/nu/?doc=' + url + '&out=json&parser=html5',

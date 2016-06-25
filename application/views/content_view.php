@@ -10,19 +10,23 @@
 		      		Foram encontradas <span class="resultados-numero badge"></span> páginas no site.
 		      		<p><button data-url="" type="button" class="validar-todas btn btn-xs btn-primary">Validar todas</button></p>
 		      	</div>
+		      	<div class="page-stats" style="display:none;">
+		      		<span class="validas badge verde">0</span> páginas válidas
+		      		<span class="erradas badge vermelho">0</span> páginas com erro
+		      		<span class="nd badge vermelho">0</span> documento näo suportado
+		      	</div>
 				<table class="tabela-resultados table table-hover">
-		        <thead>
-		          <tr>
-		            <th>#</th>
-					<th>Página (url)</th>
-		            <th>Status</th>
-		          </tr>
-		        </thead>
-		        <tbody class="tabela-resultados-corpo">
-		          <!-- adiciona colunas aqui -->
-		        </tbody>
-		      </table>
-		      
+			        <thead>
+			          <tr>
+			            <th>#</th>
+						<th>Página (url)</th>
+			            <th>Status</th>
+			          </tr>
+			        </thead>
+			        <tbody class="tabela-resultados-corpo">
+			          <!-- adiciona colunas aqui -->
+			        </tbody>
+		      	</table>
 			</div>
 		</div>
 	</div>
@@ -60,4 +64,22 @@
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
+	<div id="modalND" class="modal fade" tabindex="-1" role="dialog">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>One fine body&hellip;</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
 </div><!-- /.container -->
