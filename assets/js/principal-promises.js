@@ -58,15 +58,25 @@
 				element.find('.modal-body').html('');
 				arrMensagem.forEach(function(item,i){
 					// console.log(item);
-					element.find('.modal-body')
-					.append("<div><a role='button' style='margin-bottom:5px;' class='btn btn-primary btn-xs' data-toggle='collapse' href='#collapseExample-" + item.type + item.lastLine + "' aria-expanded='false' aria-controls='collapseExample-" + item.type + item.lastLine + "'>" + item.lastLine + "</a></div>"
-						// + "<p>" + item.subType + "</p>"
-						+ "<div class='collapse' id='collapseExample-" + item.type + item.lastLine + "'>"
-							+ "<div class='well'>"
-						// + "<p><strong>" + item.lastLine + "</strong></p>"
-						+ "<p class='modal-bg-info bg-warning'>" + escapeHtml(item.extract) + "</p>"
-						+ "<p class='modal-bg-info bg-info'>" + escapeHtml(item.message) + "</p>"
-						+ "</div></div>");
+					if (item.type == "non-document-error") {
+						element.find('.modal-body')
+						.append("<div class='well'>"
+							+ "<strong>" + item.type + "</strong>"
+							+ "<br>"
+							+ "<em>" + item.subType + "</em>"
+							+ "<p class='modal-bg-info bg-info'>" + escapeHtml(item.message) + "</p>"
+							+ "</div>");
+					} else {
+						element.find('.modal-body')
+						.append("<div><a role='button' style='margin-bottom:5px;' class='btn btn-primary btn-xs' data-toggle='collapse' href='#collapseExample-" + item.type + item.lastLine + "' aria-expanded='false' aria-controls='collapseExample-" + item.type + item.lastLine + "'>" + item.lastLine + "</a></div>"
+							// + "<p>" + item.subType + "</p>"
+							+ "<div class='collapse' id='collapseExample-" + item.type + item.lastLine + "'>"
+								+ "<div class='well'>"
+							// + "<p><strong>" + item.lastLine + "</strong></p>"
+							+ "<p class='modal-bg-info bg-warning'>" + escapeHtml(item.extract) + "</p>"
+							+ "<p class='modal-bg-info bg-info'>" + escapeHtml(item.message) + "</p>"
+							+ "</div></div>");
+					}
 				});
 				return;
 			}
@@ -104,6 +114,7 @@
 		        	}).done(resolve).fail(function( jqXHR, textStatus ) {
 		        		// reject(textStatus);
   						console.log( url + " failed: " + textStatus );
+  						$(".verificar-url[data-url='" + url + "']").css('background-color', 'red').text('falhou');
 		        	});
 		        	// setTimeout(function(resolve) {
 		        	// 	var data = {
@@ -123,101 +134,66 @@
 			}
 			// console.log(arrOutput);
 			function output(data) {
-				// console.log('aqui: ' + textStatus);
 				if (data) {
-					 // console.log(data);
 					if (data !== "Complete!") {
-						var aux = "";					
-						for (var key in data) {
-						    if (data.hasOwnProperty(key)) {
-						        if (aux == data['url']) {
-						        	// faz nada
-						        } else {
-						        	// faz
-						        	var atual = data['url'];
-							        var mensagens = data['messages'];
-							        // console.log('mensagens: ' + mensagens);
-							        arr.each(function(index,item){
-						    		  	var el = $(this);
-						    			var url = el.attr('data-url');
-						    			if (url == atual) {
-						    				// set background transparent on parent
-							         		el.parent().css('background-color', 'transparent');
-							         		el.html('');
-							         		// validar por tamanho dos arrays ao inves do objeto
-							         		// pois checa duas vezes
-						    				if ($.isEmptyObject(mensagens)) {
-												var elval = $('.validas');
-												var valorval = parseInt(elval.text());
-												elval.text(valorval + 1);
-						    					
-						    					console.log('url válida: ' + atual);
-						    					el.parent().html('<span class="badge green">WEC Válido</span>');
-						    					// el.parent().text('w3c válido');
-						         				el.parent().parent().addClass('bg-success');	
-						    				} else {
-						    					var  arrErro = [];
-						    					var  arrND = [];
-							         			var  arrInfo = [];
-							         			var  arrWarning = [];
-							     				// el.text('erro');
-							       				// el.parent().parent().addClass('bg-danger');
-							         			// el.removeClass('btn-succcess').addClass('btn-danger');
-							           			mensagens.forEach(function(item,i) {
-								           			// console.log(item.type);
-								           			if (item.type=="error") {
-								           				arrErro.push(item);
-								           			} else if (item.type=="info") {
-								           				arrInfo.push(item);
-								           			} else if (item.type=="non-document-error") {
-								           				arrND.push(item);
-								           			} 
-							           			});
-								           		// set up modals with different arrays (todo way better)
-								           		var elerro = $('.erradas');
-								           		var elnd = $('.nd');
-												var valor = parseInt(elerro.text());
-												var valornd = parseInt(elnd.text());
-												if (arrInfo.length>0) {
-													el.parent().append('<button data-toggle="modal" data-tipo="info" data-target="#modalInfo-' + index + '" data-url="' + atual + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
-													// el.parent().parent().next('.tabela-resultados-mensagem')
-													// .find('.panel-body')
-													// .append('<button data-toggle="modal" data-target="#modalInfo-' + index + '" data-dados="' + arrInfo + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
-							     					modal('info', arrInfo, index);
-							     					
-													elerro.text(valor + 1);
-												} 
-												if (arrErro.length>0) {
-													el.parent().append('<button data-toggle="modal" data-tipo="erro" data-target="#modalErro-' + index + '" data-dados="' + atual + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
-													// el
-													// .parent()
-													// .parent()
-													// .next('.tabela-resultados-mensagem')
-													// .find('.panel-body')
-													// .append('<button data-toggle="modal" data-target="#modalErro-' + index + '" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
-													modal('erro', arrErro, index);
-													elerro.text(valor + 1);
-												}
-												if (arrND.length>0) {
-													el.parent().append('<button data-toggle="modal" data-tipo="non-document-error" data-target="#modalND-' + index + '" data-dados="' + atual + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Inválido <span class="badge">' + arrND.length + '</span></button>');
-													// el
-													// .parent()
-													// .parent()
-													// .next('.tabela-resultados-mensagem')
-													// .find('.panel-body')
-													// .append('<button data-toggle="modal" data-target="#modalErro-' + index + '" data-dados="' + arrErro + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
-													modal('non-document-error', arrND, index);
-													elnd.text(valornd + 1);
-												}
-												// el.parent().parent().next('.tabela-resultados-mensagem').slideToggle('slow');
-												el.remove();
-						    				}
-						    			}
-					         		});
-						        }
-						        aux = data['url'];
-						    }
-						}
+			        	var atual = data['url'];
+				        var mensagens = data['messages'];
+				        console.log(atual, mensagens);
+				        arr.each(function(index,item){
+			    		  	var el = $(this);
+			    			var url = el.attr('data-url');
+			    			if (url == atual) {
+				         		el.html('');
+				         		// validar por tamanho dos arrays ao inves do objeto
+				         		// pois checa duas vezes
+			    				if ($.isEmptyObject(mensagens)) {
+									var elval = $('.validas');
+									var valorval = parseInt(elval.text());
+									elval.text(valorval + 1);
+			    					console.log('url válida: ' + atual);
+			    					el.parent().append('<span class="badge green">WEC Válido</span>');
+			         				el.parent().parent().addClass('bg-success');	
+			    				} else {
+			    					var  arrErro = [];
+			    					var  arrND = [];
+				         			var  arrInfo = [];
+				         			var  arrWarning = [];
+				           			mensagens.forEach(function(item,i) {
+					           			// console.log(item.type);
+					           			if (item.type=="error") {
+					           				arrErro.push(item);
+					           			} else if (item.type=="info") {
+					           				arrInfo.push(item);
+					           			} else if (item.type=="non-document-error") {
+					           				arrND.push(item);
+					           			} 
+				           			});
+					           		// set up modals with different arrays (todo way better)
+					           		var elerro = $('.erradas');
+					           		var elnd = $('.nd');
+									var valor = parseInt(elerro.text());
+									var valornd = parseInt(elnd.text());
+									if (arrInfo.length>0) {
+										el.parent().append('<button data-toggle="modal" data-tipo="info" data-target="#modalInfo-' + index + '" data-url="' + atual + '" type="button" class="btn btn-xs btn-info tabela-resultados-mensagem-botao">Info <span class="badge">' + arrInfo.length + '</span></button>');
+				     					modal('info', arrInfo, index);
+										elerro.text(valor + 1);
+									} 
+									if (arrErro.length>0) {
+										el.parent().append('<button data-toggle="modal" data-tipo="erro" data-target="#modalErro-' + index + '" data-dados="' + atual + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Errors <span class="badge">' + arrErro.length + '</span></button>');
+										modal('erro', arrErro, index);
+										elerro.text(valor + 1);
+									}
+									if (arrND.length>0) {
+										el.parent().append('<button data-toggle="modal" data-tipo="non-document-error" data-target="#modalND-' + index + '" data-dados="' + atual + '" type="button" class="btn btn-xs btn-danger tabela-resultados-mensagem-botao">Inválido <span class="badge">' + arrND.length + '</span></button>');
+										modal('non-document-error', arrND, index);
+										elnd.text(valornd + 1);
+									}
+									// el.remove();
+			    				}
+			    				el.remove();
+			    			}
+		         		});
+
 					} else {
 						console.log('sem data');
 					}
@@ -230,17 +206,20 @@
 	    	$('body').delegate('.validar-todas','click',function(){
 	    		$('.page-stats').slideToggle();
 	    		// remove old modals
-	    		$('[id^="modalInfo-]').remove();
+	    		$('[id^="modalInfo-"]').remove();
 				$('[id^="modalErro-"]').remove();
 				$('[id^="modalND-"]').remove();
 	    		arr = $('.tabela-resultados-corpo > tr > td > .verificar-url');
-	    		var arrUrls = new Array();
+	    		var arrUrls = [];
 	    		arr.each(function(index,item){
 	    			var url = $(this).attr('data-url');
 	    			var el = $(this);
 		   			el.html('<img style="width:16px;height:16px;" src="http://localhost/validae/assets/images/ajaxloading.gif">');
 	    			arrUrls.push(url);
 	    		});
+	    		// var url = arrUrls;
+	    		// console.log(url);
+	    		// $(".verificar-url[data-url='" + url + "']").hide();
 	    		arrUrls
 	    		.map(getFile)
 				.reduce(
@@ -368,7 +347,11 @@
 		            },
 		            dataType: 'json'
 		        }).done(function(data,status) {
-		      		//console.log(status);
+					// console.log(typeof data);
+		   //      	console.log(data);
+		      		// data.forEach(function(item, i){
+		      		// 	console.log(item);
+		      		// });
 		      		if (status=="success") {
 			        	$('.resultados-total').slideToggle('slow', function(){
 			        		$('.tabela-resultados').slideToggle('slow');	
