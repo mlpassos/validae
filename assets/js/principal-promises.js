@@ -6,8 +6,6 @@
         },
         App : function () {
         	var arr;
-        	// cache? =] needs more implementation
-        	$.ajaxSetup({ cache: true});
 			// for escaping html text
 			function escapeHtml(text) {
 			  var map = {
@@ -19,32 +17,7 @@
 			  };
 			  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 			}
-			// setting up modals (needs to solve bug)
-			// var modal = (function (tipo, arrMensagem) {
-			// 	var element = "";
-			// 	function init() {
-			// 		if (tipo == "info") {
-			// 			element = $('#modalInfo');
-			// 		} else if (tipo == "erro") {
-			// 			element = $('#modalErro');
-			// 		}
-			// 		element.find('.modal-body').html('');
-			// 		arrMensagem.forEach(function(item,i){
-			// 			// console.log(item);
-			// 			element.find('.modal-body').append("<div><a role='button' style='margin-bottom:5px;' class='btn btn-primary btn-xs' data-toggle='collapse' href='#collapseExample-" + item.type + item.lastLine + "' aria-expanded='false' aria-controls='collapseExample-" + item.type + item.lastLine + "'>" + item.lastLine + "</a></div>"
-			// 			// + "<p>" + item.subType + "</p>"
-			// 			+ "<div class='collapse' id='collapseExample-" + item.type + item.lastLine + "'>"
-			// 				+ "<div class='well'>"
-			// 			// + "<p><strong>" + item.lastLine + "</strong></p>"
-			// 			+ "<p class='modal-bg-info bg-warning'>" + escapeHtml(item.extract) + "</p>"
-			// 			+ "<p class='modal-bg-info bg-info'>" + escapeHtml(item.message) + "</p>"
-			// 			+ "</div></div>");
-			// 		});
-			// 	}
-			// 	return {
-			// 		create: init
-			// 	}
-			// })();
+
 			function modal(tipo, arrMensagem, index) {
 				// criar modal com js passando o template direto
 				var element = "";
@@ -132,7 +105,6 @@
 		        	// }, 100);
 				});
 			}
-			// console.log(arrOutput);
 			function output(data) {
 				if (data) {
 					if (data !== "Complete!") {
@@ -202,7 +174,6 @@
 				}
 			}
 
-			// var arrRes = new Array();
 	    	$('body').delegate('.validar-todas','click',function(){
 	    		$('.page-stats').slideToggle();
 	    		// remove old modals
@@ -239,7 +210,7 @@
 					output("Complete!");
 				});
 	    	});
-	    	// validate single url
+
 	    	$('body').delegate('.verificar-url', 'click', function() {
 	    		var url = encodeURIComponent($(this).attr('data-url'));
 	    		var botao = $(this);
@@ -291,7 +262,7 @@
 	        	// console.log('terminou: ' + status);
 	        	});
 	    	});
-			// search pages in a website
+
 	    	$('#formSiteUrl').submit(function(e) {
 	    		e.preventDefault();
 	    		var url = $('#strPesquisar').val();
@@ -347,11 +318,6 @@
 		            },
 		            dataType: 'json'
 		        }).done(function(data,status) {
-					// console.log(typeof data);
-		   //      	console.log(data);
-		      		// data.forEach(function(item, i){
-		      		// 	console.log(item);
-		      		// });
 		      		if (status=="success") {
 			        	$('.resultados-total').slideToggle('slow', function(){
 			        		$('.tabela-resultados').slideToggle('slow');	
