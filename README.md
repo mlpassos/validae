@@ -7,12 +7,6 @@ same domain.
 
 Validae is being developed to validate my own sites, but if you feel you want to contribute, be my guest and make a pull request.
 
-** FIRST THING TO DO IS CACHE ALL AJAX CALLS DUE TO API ABUSE ** 
-
-- increase time between requests?
-- use promises for requests
-- anything else
-
 Current features:
 
 - Scans for all pages in the website domain 
@@ -20,13 +14,11 @@ Current features:
 - Show Messages about each page individually
 - Show Messages for all (validate all)
 
-The validate all funcionality is being developed (TO DO):
+Todo list:
 
-- Smartjax jQuery Plugin tried with no success
-- ajax cache to be implemented via jquery $.ajax cache
-
-- Turn all validation ajax calls into an ajax deferred object for chaining.
-- Offer a way to validate all pages in a unique ajax request.
+- Refactor JS code to the Module Pattern
+- Implement EventEmitter for Messaging between modules
+- Cache
 
 That's all folks.
 
